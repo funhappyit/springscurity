@@ -36,8 +36,18 @@ spring:
     serialization:
       fail-on-empty-beans: false
 
-cos:
-  key: cos1234
+  security:
+    oauth2:
+      client:
+        registration:
+          google:
+            client-id: 189973739195-eb5vlutn2fhohj30jt54v6p3drjb7tkg.apps.googleusercontent.com
+            client-secret: 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
+            scope:
+            - email
+            - profile
+            
+            
       
   
 

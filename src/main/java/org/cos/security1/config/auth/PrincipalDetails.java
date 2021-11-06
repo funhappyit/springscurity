@@ -2,10 +2,14 @@ package org.cos.security1.config.auth;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Map;
 
 import org.cos.security1.model.User;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.oauth2.core.user.OAuth2User;
+
+import lombok.Data;
 
 /* 
  시큐리티가 /login 주소 요청이 오면 낚아채서 로그인을 진행시킨다.
@@ -17,12 +21,20 @@ import org.springframework.security.core.userdetails.UserDetails;
  Security Session => Authentication => UserDetails(PrincipalDetails)
  
 */
-public class PrincipalDetails implements UserDetails{
+@Data
+public class PrincipalDetails implements UserDetails,OAuth2User{
 
 	private User user;//콤포지션 
+	private Map<String, Object> attributes;
 	
+	//일반 로그인 
 	public PrincipalDetails(User user) {
 		this.user = user;
+	}
+	//oauth로그인
+	public PrincipalDetails(User user,Map<String, Object> attributes) {
+		this.user = user;
+		this.attributes = attributes;
 	}
 	
 	//해당 유저의 권한을 리턴하는 곳
@@ -76,6 +88,18 @@ public class PrincipalDetails implements UserDetails{
 		//우리 사이트!! 1년동안 회원이 로그인을 안하면!! 휴먼 계정으로 하게 됨
 		//현재시간 - 로그인시간 -> 1년이 넘으면 false
 		return true;
+	}
+
+	@Override
+	public Map<String, Object> getAttributes() {
+		return attributes;
+	}
+
+	@Override
+	public String getName() {
+		return null;
+		
+		
 	}
 	
 
